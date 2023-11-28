@@ -1,0 +1,25 @@
+[{
+  "_id": "656007810113a491a8c56b4b",
+  "userId": 1000001,
+  "userName": "admin",
+  "userPwd": "e10adc3949ba59abbe56e057f20f883e",
+  "userEmail": "admin@imooc.com",
+  "mobile": {
+    "$numberLong": "13788888888"
+  },
+  "sex": 0,
+  "deptId": [
+    "60167059c9027b7d2c520a61",
+    "60167345c6a4417f2d27506f"
+  ],
+  "job": "前端架构师",
+  "state": 1,
+  "role": 0,
+  "roleList": [
+    "60180b07b1eaed6c45fbebdb",
+    "60150cb764de99631b2c3cd3",
+    "60180b59b1eaed6c45fbebdc"
+  ],
+  "createTime": "2021-01-17T13:32:06.381Z",
+  "lastLoginTime": "2021-01-17T13:32:06.381Z"
+}]

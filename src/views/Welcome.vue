@@ -25,7 +25,6 @@
           v-model="addCaseform.caseDate"
           type="date"
           placeholder="选择开始日期"
-          value-format="yyyy-MM"
         />
       </el-form-item>
       <el-form-item label="案件名称" :label-width="120" required>
@@ -58,7 +57,7 @@
 <script setup lang="js">
 // vue3写法
 import { reactive, ref, getCurrentInstance, onMounted } from "vue";
-import { getCasesList, casesOperate } from "../api/cases";
+import { getCasesList, casesOperate } from "../api/case";
 import moment from 'moment'
 //   获取Composition API 上下文对象
 const { ctx } = getCurrentInstance();

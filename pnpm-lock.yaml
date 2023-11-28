@@ -11,6 +11,9 @@ dependencies:
   element-plus:
     specifier: ^1.0.2-beta.40
     version: 1.0.2-beta.71(vue@3.3.8)
+  moment:
+    specifier: ^2.29.4
+    version: 2.29.4
   mongoose:
     specifier: ^5.12.13
     version: 5.13.21
@@ -613,6 +616,10 @@ packages:
 
   /mitt@2.1.0:
     resolution: {integrity: sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg==}
+    dev: false
+
+  /moment@2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
     dev: false
 
   /mongodb@3.7.4:
