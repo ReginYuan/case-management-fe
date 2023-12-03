@@ -2,7 +2,7 @@
   <div class="login-wrapper">
     <div class="modal">
       <el-form ref="userFrom" :model="user" status-icon :rules="rules">
-        <div class="title">大屏管理平台</div>
+        <div class="title">案件管理平台</div>
         <el-form-item prop="userName">
           <el-input prefix-icon="el-icon-user" v-model="user.userName" />
         </el-form-item>
@@ -26,44 +26,41 @@
 // vue2写法
 export default {
   name: "Login",
-  data () {
+  data() {
     return {
       user: {
-        userName: '',
-        userPwd: ''
+        userName: "",
+        userPwd: "",
       },
       // 校验规则
       rules: {
         userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
-        userPwd: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-        ]
-      }
-    }
+        userPwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
+      },
+    };
   },
   methods: {
     // 登录功能
-    login () {
+    login() {
       // 请求登录接口
       this.$refs.userFrom.validate((valid) => {
         if (valid) {
           // 向登录接口提交请求
           this.$api.login(this.user).then((res) => {
             // 保存数据
-            this.$store.commit('saveUserInfo', res)
-            console.log('login res', res)
-            this.$router.push('/welcome')
-          })
+            this.$store.commit("saveUserInfo", res);
+            console.log("login res", res);
+            this.$router.push("/welcome");
+          });
         } else {
-          return false
+          return false;
         }
-      })
-
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 <style  lang="scss" >
 .login-wrapper {
