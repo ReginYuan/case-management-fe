@@ -1,24 +1,24 @@
 <template>
   <div class="home">
     <div class="basic-layout">
-      <!-- <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']"> -->
+      <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
         <!-- 系统logo -->
-        <!-- <div class="logo">
+        <div class="logo">
           <img src="./../assets/logo1.png" alt="" />
           <span>Manager</span>
-        </div> -->
+        </div>
         <!-- 导航菜单 -->
-        <!-- <el-menu
+        <el-menu
           :default-active="activeMenu"
           background-color="#001529"
           text-color="#fff"
           router
           :collapse="isCollapse"
           class="nav-menu"
-        > -->
-          <!-- <TreeMenu :userMenu="menuList" />
-        </el-menu> -->
-      <!-- </div> -->
+        >
+          <TreeMenu :userMenu="menuList" />
+        </el-menu>
+      </div>
       <div :class="['content-right', isCollapse ? 'fold' : 'unfold']">
         <div class="nav-top">
           <div class="nav-left">
@@ -129,51 +129,51 @@ export default {
 .basic-layout {
   position: relative;
   /**左侧导航样式**/
-  // .nav-side {
-  //   position: fixed;
-  //   width: 200px;
-  //   //100vh 自动计算高度
-  //   height: 100vh;
-  //   background-color: #001529;
-  //   color: #fff;
-  //   overflow-y: auto;
-  //   transition: width 0.5s;
+  .nav-side {
+    position: fixed;
+    width: 200px;
+    //100vh 自动计算高度
+    height: 100vh;
+    background-color: #001529;
+    color: #fff;
+    overflow-y: auto;
+    transition: width 0.5s;
 
-  //   .logo {
-  //     display: flex;
-  //     align-items: center;
-  //     font-size: 18px;
-  //     height: 50px;
-  //     img {
-  //       margin: 0 16px;
-  //       width: 32px;
-  //       height: 32px;
-  //     }
-  //   }
-  //   .nav-menu {
-  //     height: calc(100vh - 50px);
-  //     border-right: none;
-  //   }
-  //   // 合并左侧菜单
-  //   &.fold {
-  //     width: 64px;
-  //   }
-  //   // 展开左侧菜单
-  //   &.unfold {
-  //     width: 200px;
-  //   }
-  // }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      height: 50px;
+      img {
+        margin: 0 16px;
+        width: 32px;
+        height: 32px;
+      }
+    }
+    .nav-menu {
+      height: calc(100vh - 50px);
+      border-right: none;
+    }
+    // 合并左侧菜单
+    &.fold {
+      width: 64px;
+    }
+    // 展开左侧菜单
+    &.unfold {
+      width: 200px;
+    }
+  }
   /** 右侧页面内容样式**/
   .content-right {
-    // margin-left: 200px;
+    margin-left: 200px;
     // 合并左侧菜单
-    // &.fold {
-    //   margin-left: 64px;
-    // }
-    // // 展开左侧菜单
-    // &.unfold {
-    //   margin-left: 200px;
-    // }
+    &.fold {
+      margin-left: 64px;
+    }
+    // 展开左侧菜单
+    &.unfold {
+      margin-left: 200px;
+    }
     /** 右侧导航内容样式**/
     .nav-top {
       height: 50px;

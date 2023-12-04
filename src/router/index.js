@@ -7,8 +7,16 @@ const routes = [
       title: '首页'
     },
     component: () => import('../views/Home.vue'),
-    redirect: '/welcome',
+    redirect: '/economicInvestigation',
     children: [
+      {
+        path: '/economicInvestigation',
+        name: 'economicInvestigation',
+        meta: {
+          title: '案件页'
+        },
+        component: () => import('@/views/economicInvestigation/index.vue'),
+      },
       {
         path: '/welcome',
         name: 'welcome',
