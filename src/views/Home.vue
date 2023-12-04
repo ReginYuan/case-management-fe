@@ -5,7 +5,7 @@
         <!-- 系统logo -->
         <div class="logo">
           <img src="./../assets/logo1.png" alt="" />
-          <span>Manager</span>
+          <span>经侦</span>
         </div>
         <!-- 导航菜单 -->
         <el-menu
@@ -65,43 +65,43 @@
   </div>
 </template>
 <script>
-import TreeMenu from './../components/TreeMenu.vue'
-import BreadCrumb from './../components/BreadCrumb.vue'
+import TreeMenu from "./../components/TreeMenu.vue";
+import BreadCrumb from "./../components/BreadCrumb.vue";
 export default {
   name: "Home",
-  data () {
+  data() {
     return {
-      isCollapse: false,//控制侧边菜单显示
-      userInfo: this.$store.state.userInfo,//获取登录用户信息
-      noticeCount: 0,//通知数量
+      isCollapse: false, //控制侧边菜单显示
+      userInfo: this.$store.state.userInfo, //获取登录用户信息
+      noticeCount: 0, //通知数量
       menuList: [], //菜单列表
-      activeMenu: location.hash.slice(1) //默认选中菜单
-    }
+      activeMenu: location.hash.slice(1), //默认选中菜单
+    };
   },
   components: {
     TreeMenu,
-    BreadCrumb
+    BreadCrumb,
   },
-  mounted () {
+  mounted() {
     this.getNoticeCount();
     this.getPermissionList();
   },
   methods: {
     // 退出功能
-    handleLogout (key) {
-      if (key == 'email') return;
+    handleLogout(key) {
+      if (key == "email") return;
       // 设置localStorage数据为空
-      this.$store.commit('saveUserInfo', '');
+      this.$store.commit("saveUserInfo", "");
       // 清空当前数据
       this.userInfo = {};
-      this.$router.push('/login')
+      this.$router.push("/login");
     },
     // 控制左侧菜单隐藏
-    toggle () {
-      this.isCollapse = !this.isCollapse
+    toggle() {
+      this.isCollapse = !this.isCollapse;
     },
     // 获取通知信息总数
-    async getNoticeCount () {
+    async getNoticeCount() {
       try {
         // 请求消息api,获取通知数量
         const count = await this.$api.noticeCount();
@@ -111,18 +111,20 @@ export default {
       }
     },
     // 获取菜单列表
-    async getPermissionList () {
+    async getPermissionList() {
       try {
         // 请求消息api,获取菜单列表
         // getPermissionList
-        const list = await this.$api.getPermissionList();
-        this.menuList = list;
+        const { menuList } = await this.$api.getPermissionList();
+        console.log("menuList", menuList);
+
+        this.menuList = menuList.splice(2, 1); ;
       } catch (error) {
-         console.error(error);
+        console.error(error);
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <style  lang="scss" scoped>

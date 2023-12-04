@@ -141,119 +141,115 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, reactive, ref, toRaw } from 'vue'
-import utils from './../utils/utils'
-
+import { getCurrentInstance, onMounted, reactive, ref, toRaw } from "vue";
+import utils from "./../utils/utils";
+import api  from "../api/index"
 
 // 定义各种数据
 const DataEffect = () => {
-
-
   // 定义表单验证规则
   const rules = reactive({
     userName: [
       {
         required: true,
-        message: '请输入用户名称',
-        trigger: 'blur'
-      }
+        message: "请输入用户名称",
+        trigger: "blur",
+      },
     ],
     userEmail: [
       {
         required: true,
-        message: '请输入用户的邮箱',
-        trigger: 'blur'
-      }
+        message: "请输入用户的邮箱",
+        trigger: "blur",
+      },
     ],
     mobile: [
       {
         pattern: /1[3-9]\d{9}/,
-        message: '请输入正确的手机号格式',
-        trigger: 'blur'
-      }
+        message: "请输入正确的手机号格式",
+        trigger: "blur",
+      },
     ],
     deptId: [
       {
         required: true,
-        message: '请选择所属部门',
-        trigger: 'blur'
-      }
-    ]
-  })
+        message: "请选择所属部门",
+        trigger: "blur",
+      },
+    ],
+  });
 
   // 定义动态表格-格式
   const columns = reactive([
     {
-      label: '用户ID',
-      prop: 'userId',
+      label: "用户ID",
+      prop: "userId",
     },
     {
-      label: '用户名',
-      prop: 'userName',
+      label: "用户名",
+      prop: "userName",
     },
     {
-      label: '用户邮箱',
-      prop: 'userEmail',
+      label: "用户邮箱",
+      prop: "userEmail",
     },
     {
-      label: '用户角色',
-      prop: 'role',
-      formatter (row, column, value) {
+      label: "用户角色",
+      prop: "role",
+      formatter(row, column, value) {
         return {
-          0: '管理员',
-          1: '普通用户'
-        }[value]
-      }
+          0: "管理员",
+          1: "普通用户",
+        }[value];
+      },
     },
     {
-      label: '用户状态',
-      prop: 'state',
-      formatter (row, column, value) {
+      label: "用户状态",
+      prop: "state",
+      formatter(row, column, value) {
         return {
-          1: '在职',
-          2: '离职',
-          3: '试用期'
-        }[value]
-      }
+          1: "在职",
+          2: "离职",
+          3: "试用期",
+        }[value];
+      },
     },
     {
-      label: '注册时间',
-      prop: 'createTime',
+      label: "注册时间",
+      prop: "createTime",
       width: 200,
       formatter: (row, column, value) => {
-        return utils.fomateDate(new Date(value))
-      }
+        return utils.fomateDate(new Date(value));
+      },
     },
     {
-      label: '最后登录时间',
-      prop: 'lastLoginTime',
+      label: "最后登录时间",
+      prop: "lastLoginTime",
       width: 200,
       formatter: (row, column, value) => {
-        return utils.fomateDate(new Date(value))
-      }
-    }
+        return utils.fomateDate(new Date(value));
+      },
+    },
   ]);
 
   return {
     rules,
-    columns
-  }
-
-}
-
+    columns,
+  };
+};
 
 // 获取用数据功能封装
 const GetUserListEffect = (ctx) => {
   // 初始化用表单对象
   const user = reactive({
-    state: 0
+    state: 0,
   });
   //初始化用户分页对象
   const pager = reactive({
     pageNum: 1,
     pageSize: 10,
-    total: 24
-  })
+    total: 24,
+  });
   // 初始化用户列表数据
   const userList = ref([]);
   // 获取用户列表
@@ -262,90 +258,83 @@ const GetUserListEffect = (ctx) => {
     let params = { ...user, ...pager };
     try {
       // 通过上下文对象获取vue3中的请求对象,并将数据传输到接口
-      const { list, page } = await ctx.$api.getUserList(params)
+      const { list, page } = await ctx.$api.getUserList(params);
       userList.value = list;
       pager.total = page.total;
-    } catch (error) {
-      
-    }
-  }
-  return { user, pager, userList, getUserList }
-}
+    } catch (error) {}
+  };
+  return { user, pager, userList, getUserList };
+};
 
 // 用查询和重置功能封装
 const handleEffect = (ctx) => {
   //  查询事件,获取用户列表
   const handleQuery = () => {
     ctx.getUserList();
-  }
+  };
   //重置查询列表
   const handleReset = (form) => {
     // 通过form动态控制所有表单的ref重置
     ctx.$refs[form].resetFields();
-  }
-  return { handleQuery, handleReset }
-}
+  };
+  return { handleQuery, handleReset };
+};
 
 // 表格多选功能封装
 const handleSelectionChangeEffect = () => {
-
   // 选择中用户列表的对象
   const checkedUserIds = ref([]);
   //表格多选
   const handleSelectionChange = (list) => {
     let arr = [];
-    list.map(item => {
-      arr.push(item.userId)
-    })
+    list.map((item) => {
+      arr.push(item.userId);
+    });
     checkedUserIds.value = arr;
-  }
-  return { checkedUserIds, handleSelectionChange }
-}
+  };
+  return { checkedUserIds, handleSelectionChange };
+};
 
 // 分页功能封装
 const handleCurrentChangeEffect = () => {
-
   // 分页事件处理 current页数
   const handleCurrentChange = (current) => {
     pager.pageNum = current;
     getUserList();
-  }
-  return { handleCurrentChange }
-}
+  };
+  return { handleCurrentChange };
+};
 
 // 新增用户功能封装
 const handleCrateEffect = (ctx) => {
-
-
   // 定义用户操作行为
-  const action = ref('create');
+  const action = ref("create");
   // 定义弹窗标题
-  const userDialogName = ref('新增用户')
+  const userDialogName = ref("新增用户");
   // 弹窗显示对象
   const showModal = ref(false);
   // 新增用户对象
   const userForm = reactive({
-    userName: '',
-    state: 3
-  })
+    userName: "",
+    state: 3,
+  });
 
   // 新增用户
   const handleCrate = () => {
     // 设置操作为新增
-    action.value = 'add';
+    action.value = "add";
     showModal.value = true;
-  }
+  };
 
   // 用户弹窗关闭
   const handleClose = () => {
     showModal.value = false;
     // 重置查询列表
-    ctx.handleReset('dialogForm');
-  }
+    ctx.handleReset("dialogForm");
+  };
 
   // 用户信息提交
   const handleSubmit = () => {
-
     // 校验表单用户数据是否为空
     ctx.$refs.dialogForm.validate(async (valid) => {
       if (valid) {
@@ -361,59 +350,62 @@ const handleCrateEffect = (ctx) => {
         let res = await ctx.$api.userSubmit(params);
         if (res) {
           showModal.value = false;
-          if (action.value === 'add') {
-            ctx.$message.success('用户创建成功');
-          } else if (action.value === 'edit') {
-            ctx.$message.success('用户修改成功');
+          if (action.value === "add") {
+            ctx.$message.success("用户创建成功");
+          } else if (action.value === "edit") {
+            ctx.$message.success("用户修改成功");
           }
           // 重置用户新增表单
-          ctx.handleReset('dialogForm');
+          ctx.handleReset("dialogForm");
           // 查询用户数据
           ctx.getUserList();
         }
       }
-    })
-  }
+    });
+  };
 
-  return { action, userDialogName, showModal, userForm, handleCrate, handleClose, handleSubmit }
-}
-
+  return {
+    action,
+    userDialogName,
+    showModal,
+    userForm,
+    handleCrate,
+    handleClose,
+    handleSubmit,
+  };
+};
 
 // 删除功能封装
 const handleDelEffect = (ctx, checkedUserIds) => {
-
   // 用户单个删除
   const handleDel = async (row) => {
     await ctx.$api.UserDel({
-      userIds: [row.userId] //可单个删除,也可批量删除
-    })
-    ctx.$message.success('删除成功');
+      userIds: [row.userId], //可单个删除,也可批量删除
+    });
+    ctx.$message.success("删除成功");
     ctx.getUserList();
-  }
+  };
   // 批量删除
   const handlePatchDel = async () => {
     if (checkedUserIds.value.length == 0) {
-      ctx.$message.error('请选择要删除的用户')
-      return
+      ctx.$message.error("请选择要删除的用户");
+      return;
     }
     const res = await ctx.$api.UserDel({
-      userIds: checkedUserIds.value //可单个删除,也可批量删除
-    })
+      userIds: checkedUserIds.value, //可单个删除,也可批量删除
+    });
     if (res.nModified > 0) {
-      ctx.$message.success('删除成功');
+      ctx.$message.success("删除成功");
       ctx.getUserList();
     } else {
-      ctx.$message.error('删除失败');
+      ctx.$message.error("删除失败");
     }
-
-  }
-  return { handleDel, handlePatchDel }
-
-}
+  };
+  return { handleDel, handlePatchDel };
+};
 
 // 编辑用户功能封装
 const handleEditEffect = (ctx, action, showModal, userForm, userDialogName) => {
-
   // 编辑用户
   const handleEdit = (row) => {
     userDialogName.value = "编辑用户";
@@ -423,67 +415,73 @@ const handleEditEffect = (ctx, action, showModal, userForm, userDialogName) => {
     ctx.$nextTick(() => {
       // 浅拷贝将row中的对应用户数据拷贝进userForm
       Object.assign(userForm, row);
-    })
-  }
-  return { handleEdit }
-}
-
-
+    });
+  };
+  return { handleEdit };
+};
 
 // 角色查詢功能封裝
 const GetRoleListEffect = (ctx) => {
   //  所有角色列表
-  const roleList = ref([])
+  const roleList = ref([]);
   // 角色列表查询
   const getRoleAllList = async () => {
-    let list = await ctx.$api.getRoleAllList();
+    let list = await api.getRoleAllList();
     roleList.value = list;
-  }
+  };
 
-  return { roleList, getRoleAllList }
-}
-
-
+  return { roleList, getRoleAllList };
+};
 
 // 部门列表查询功能封装
 const GetDeptListEffect = (ctx) => {
   // 部门列表
-  const deptList = ref([])
+  const deptList = ref([]);
   // 部门列表查询
   const getDeptList = async () => {
-    let list = await ctx.$api.getDeptList();
+    let list = await api.getDeptList();
     deptList.value = list;
-  }
-  return { deptList, getDeptList }
-}
-
-
-
-
+  };
+  return { deptList, getDeptList };
+};
 
 export default {
-  name: 'User',
-  setup () {
+  name: "User",
+  setup() {
     // 获取composition API上下文对象
-    const { ctx } = getCurrentInstance()
+    const { ctx } = getCurrentInstance();
 
-    const { rules, columns } = DataEffect()
-    const { user, pager, userList, getUserList } = GetUserListEffect(ctx)
-    const { handleQuery, handleReset } = handleEffect(ctx)
-    const { checkedUserIds, handleSelectionChange } = handleSelectionChangeEffect()
-    const { handleCurrentChange } = handleCurrentChangeEffect()
-    const { action, userDialogName, showModal, userForm, handleCrate, handleClose, handleSubmit } = handleCrateEffect(ctx)
-    const { handleDel, handlePatchDel } = handleDelEffect(ctx, checkedUserIds)
-    const { handleEdit } = handleEditEffect(ctx, action, showModal, userForm, userDialogName)
-    const { roleList, getRoleAllList } = GetRoleListEffect(ctx)
-    const { deptList, getDeptList } = GetDeptListEffect(ctx)
+    const { rules, columns } = DataEffect();
+    const { user, pager, userList, getUserList } = GetUserListEffect(ctx);
+    const { handleQuery, handleReset } = handleEffect(ctx);
+    const { checkedUserIds, handleSelectionChange } =
+      handleSelectionChangeEffect();
+    const { handleCurrentChange } = handleCurrentChangeEffect();
+    const {
+      action,
+      userDialogName,
+      showModal,
+      userForm,
+      handleCrate,
+      handleClose,
+      handleSubmit,
+    } = handleCrateEffect(ctx);
+    const { handleDel, handlePatchDel } = handleDelEffect(ctx, checkedUserIds);
+    const { handleEdit } = handleEditEffect(
+      ctx,
+      action,
+      showModal,
+      userForm,
+      userDialogName
+    );
+    const { roleList, getRoleAllList } = GetRoleListEffect(ctx);
+    const { deptList, getDeptList } = GetDeptListEffect(ctx);
     // 初始化接口调用
     onMounted(() => {
       getUserList();
       getDeptList();
       getRoleAllList();
     });
-
 
     return {
       user,
@@ -508,10 +506,10 @@ export default {
       roleList,
       handleClose,
       handleSubmit,
-      handleEdit
-    }
-  }
-}
+      handleEdit,
+    };
+  },
+};
 </script> 
 <style lang="scss" scoped>
 .user-manage {

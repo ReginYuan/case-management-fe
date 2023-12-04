@@ -7,16 +7,8 @@ const routes = [
       title: '首页'
     },
     component: () => import('../views/Home.vue'),
-    redirect: '/economicInvestigation',
+    redirect: '/welcome',
     children: [
-      {
-        path: '/economicInvestigation',
-        name: 'economicInvestigation',
-        meta: {
-          title: '案件页'
-        },
-        component: () => import('@/views/economicInvestigation/index.vue'),
-      },
       {
         path: '/welcome',
         name: 'welcome',
@@ -56,7 +48,15 @@ const routes = [
           title: '部门管理'
         },
         component: () => import('@/views/Dept.vue')
-      }
+      },
+      {
+        name: 'case',
+        path: '/system/cases',
+        meta: {
+          title: '案件页'
+        },
+        component: () => import('@/views/cases/index.vue'),
+      },
 
     ]
   },

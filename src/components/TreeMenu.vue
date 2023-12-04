@@ -37,6 +37,9 @@ export default {
         return []
       }
     }
+  },
+  mounted(){
+    console.log('userMenu',this.userMenu)
   }
 }
 </script>

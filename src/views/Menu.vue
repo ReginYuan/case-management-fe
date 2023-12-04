@@ -237,6 +237,7 @@ export default {
       try {
         const list = await this.$api.getMenuList(this.queryForm);
         // 将查询的菜单类表数据放进菜单列表集合中
+        console.log('list',list)
         this.menuList = list;
       } catch (e) {
         throw new Error(e);
