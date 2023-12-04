@@ -14,7 +14,7 @@ export default defineConfig({
     port: 8086,//配置端口号
     proxy: {//代理
       "/api": {
-        target: "http://localhost:3000"
+        target: "http://localhost:9000"
       }
     }
   },
