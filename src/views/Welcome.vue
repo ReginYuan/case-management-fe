@@ -46,10 +46,8 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="addCaseformCanael">Cancel</el-button>
-        <el-button type="primary" @click="addCaseformConfirm">
-          Confirm
-        </el-button>
+        <el-button @click="addCaseformCanael">取消提交</el-button>
+        <el-button type="primary" @click="addCaseformConfirm"> 提交 </el-button>
       </span>
     </template>
   </el-dialog>
