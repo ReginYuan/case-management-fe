@@ -1,0 +1,23 @@
+[{
+  "_id": "656ef3883202fe8f04773c40",
+  "username": "用户名",
+  "identificationNumber": "证件号码",
+  "bank": "银行",
+  "transactionCardNumber": "交易卡号",
+  "transactionAccountNumber": "交易账号",
+  "counterpartyName": "交易对方名称",
+  "counterpartyIdentificationNumber": "交易对方证件号",
+  "counterpartyAccountNumber": "交易对方账号",
+  "counterpartyCardNumber": "交易对方卡号",
+  "transactionType": "交易类型",
+  "debitCreditIndicator": "借贷标识",
+  "currency": "币种",
+  "transactionAmount": "交易金额",
+  "transactionBalance": "交易余额",
+  "transactionTime": "交易时间",
+  "transactionBranchName": "交易网点名称",
+  "isSuccessful": "交易是否成功",
+  "subpoenaNumber": "传票号",
+  "transactionSummary": "交易摘要",
+  "transactionRemarks": "交易备注"
+}]

@@ -73,152 +73,148 @@
         </el-select>
       </el-form-item>
       <el-form-item label="上传文件" :label-width="120" required>
-        <el-upload
-          action="http://localhost:8086/adjustment/upload"
-          :before-upload="beforeUpload"
-          :headers="getUploadHeaders"
-          :on-success="handleSuccess"
-          :on-error="handleError"
-          :file-list="fileList"
-          list-type="text"
-          multiple
-          :limit="3"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
+        <input
+          type="file"
+          class="upload"
+          ref="fileInput"
+          @change="handleFileChange"
+        />
+      </el-form-item>
+      <el-form-item label="上传文件" :label-width="120" required>
+        <el-input
+          v-model="addStreamform.targetTable"
+          placeholder="请输入表名"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="addCaseformCanael(ruleFormRef)">取消提交</el-button>
-        <el-button type="primary" @click="addCaseformConfirm"> 提交 </el-button>
+        <!-- <el-button @click="addStreamformCanael(ruleFormRef)"
+          >取消提交</el-button
+        > -->
+        <el-button type="primary" @click="addStreamformConfirm">
+          提交
+        </el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script setup>
-  // vue3写法
-  import { reactive, ref, getCurrentInstance, onMounted } from "vue";
-  import { getCasesList, casesOperate } from "../../api/case";
-  import moment from 'moment'
-  //   获取Composition API 上下文对象
-  const { ctx } = getCurrentInstance();
-  
-  
-  // 添加案件节点
-  const  ruleFormRef  = ref(null)
-  
-  // 案件列表
-  const tableData = reactive([]);
-  
-  /**
-   * 查询所有案件列表
-   */
-  const getDeptList = async () => {
-    const list = await getCasesList();
-    tableData.value = tableData.push(...list);
-  };
-  
-  // 控制案件添加弹窗显示隐藏
-  const dialogFormVisible = ref(false);
-  const openDialog = () => {
-    dialogFormVisible.value = true;
-  };
-  
-  // 定义案件字段
-  const addCaseform = reactive({
-    caseDate: "",
-    caseName: "",
-    caseDescribe: "",
-  });
-  
-  // 选择时间不能小于今天
-  const disabledDate = (time) => {
-    return time.getTime() < Date.now();
-  };
-  
-  
-  
-  // 取消提交
-  const addCaseformCanael = (ruleFormRef) => {
-    if (!addCaseform) return
-    // ctx.$refs[form].resetFields();
-    ruleFormRef.resetFields();
-    addCaseform.value = {}
-    dialogFormVisible.value = false;
-  };
-  
-  // 提交表单案件
-  const addCaseformConfirm = async () => {
-    if (!addCaseform) return;
-    if (addCaseform) {
-      let data = { ...addCaseform, action: "create" };
-      let caseDate = moment(data.caseDate).format('YYYY-MM-DD')
-      delete data.caseDate;
-      let params = { caseDate, ...data};
-     const res = await casesOperate(params);
-      getDeptList();
-      dialogFormVisible.value = false;
-    } else {
-    }
-  };
-  
-  
-  
-  // 控制添加流水弹窗
-  const  dialogStreamFormVisible = ref(false)
-  
-  // 定义表的选择类型
-  const optionsType = ref([
-    {
-      value: '1',
-      label: '交易流水信息',
-    },
-    {
-      value: '2',
-      label: '人员账号信息',
-    },
-    {
-      value: '3',
-      label: '人员信息',
-    },
-  ])
-  // 定义流水数据结构
-  const addStreamform = ref({
-     flowType:'1'
-  })
-  
-const fileList = ref([])
-  
-const handleClick = () => {
-    dialogStreamFormVisible.value =true
-}
-  
-const beforeUpload = () =>{
+// vue3写法
+import { reactive, ref, getCurrentInstance, onMounted } from "vue";
+import { getCasesList, casesOperate, streamOperate } from "../../api/case";
+import utils from "../../utils/utils";
+import moment from "moment";
+//   获取Composition API 上下文对象
+const { ctx } = getCurrentInstance();
 
-}
+// 添加案件节点
+const ruleFormRef = ref(null);
 
-const handleSuccess = () =>{
+// 案件列表
+const tableData = reactive([]);
 
-}
+/**
+ * 查询所有案件列表
+ */
+const getDeptList = async () => {
+  const list = await getCasesList();
+  tableData.value = tableData.push(...list);
+};
 
+// 控制案件添加弹窗显示隐藏
+const dialogFormVisible = ref(false);
+const openDialog = () => {
+  dialogFormVisible.value = true;
+};
 
-const handleError = () =>{
+// 定义案件字段
+const addCaseform = reactive({
+  caseDate: "",
+  caseName: "",
+  caseDescribe: "",
+});
 
-}
+// 选择时间不能小于今天
+const disabledDate = (time) => {
+  return time.getTime() < Date.now();
+};
 
-// 上传代码
-const  getUploadHeaders = () =>{ 
-  const { token } = localStorage.getItem('userInfo');
-  return {
-     Authorization: `Bearer ${token}`,
-  };
-}
+// 取消提交
+const addCaseformCanael = (ruleFormRef) => {
+  if (!addCaseform) return;
+  // ctx.$refs[form].resetFields();
+  ruleFormRef.resetFields();
+  addCaseform.value = {};
+  dialogFormVisible.value = false;
+};
 
-  onMounted(() => {
+// 提交表单案件
+const addCaseformConfirm = async () => {
+  if (!addCaseform) return;
+  if (addCaseform) {
+    let data = { ...addCaseform, action: "create" };
+
+    let caseDate = utils.fomateDate(data.caseDate, "yyyy-MM-dd");
+    delete data.caseDate;
+    console.log("caseDate", caseDate);
+    let params = { caseDate, ...data };
+    const res = await casesOperate(params);
     getDeptList();
-  });
+    dialogFormVisible.value = false;
+  } else {
+  }
+};
+
+// 控制添加流水弹窗
+const dialogStreamFormVisible = ref(false);
+
+// 定义表的选择类型
+const optionsType = ref([
+  {
+    value: "1",
+    label: "交易流水信息",
+  },
+  {
+    value: "2",
+    label: "人员账号信息",
+  },
+  {
+    value: "3",
+    label: "人员信息",
+  },
+]);
+
+// 定义流水数据结构
+const addStreamform = reactive({
+  flowType: "1",
+  targetTable: "",
+  selectedFile: null,
+});
+
+const handleClick = () => {
+  dialogStreamFormVisible.value = true;
+};
+
+// 上传文件到浏览器
+const handleFileChange = (event) => {
+  addStreamform.selectedFile = event.target.files[0];
+};
+
+const addStreamformConfirm = async () => {
+  console.log(1111);
+  const formData = new FormData();
+  formData.append("flowType", addStreamform.flowType);
+  formData.append("file", addStreamform.selectedFile);
+  formData.append("targetTable", addStreamform.targetTable);
+  console.log(2222);
+  const res = await streamOperate(formData);
+};
+
+onMounted(() => {
+  getDeptList();
+});
 </script>
   <style  lang="scss" scoped>
 .economicInvestigation {

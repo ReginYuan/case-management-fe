@@ -1,0 +1,18 @@
+[{
+  "_id": "656ef1f73202fe8f04773c3c",
+  "username": "用户名",
+  "identificationNumber": "证件号码",
+  "bank": "开户行",
+  "transactionCardNumber": "交易卡号",
+  "transactionAccountNumber": "交易账号",
+  "accountOpeningDate": "账户开户时间",
+  "accountBalance": "账户余额",
+  "availableBalance": "可用余额",
+  "currency": "币种",
+  "branchCode": "开户网点代码",
+  "branchName": "开户网点",
+  "accountStatus": "账户状态",
+  "forexTradingFlag": "炒汇标志名称",
+  "closureDate": "销户日期",
+  "accountType": "账户类型"
+}]

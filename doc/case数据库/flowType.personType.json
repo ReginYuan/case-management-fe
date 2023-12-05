@@ -1,0 +1,9 @@
+[{
+  "_id": "656ef0ca3202fe8f04773c37",
+  "username": "用户名",
+  "identificationType": "证照类型",
+  "identificationNumber": "证照号码",
+  "address": "地址",
+  "phoneNumber": "电话号码",
+  "emailAddress": "邮箱地址"
+}]

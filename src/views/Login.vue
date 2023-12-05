@@ -52,7 +52,7 @@ export default {
             // 保存数据
             this.$store.commit("saveUserInfo", res);
             console.log("login res", res);
-            this.$router.push("/economicInvestigation");
+            this.$router.push("/Welcome");
           });
         } else {
           return false;

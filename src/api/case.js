@@ -31,3 +31,22 @@ export const casesOperate = (params) => {
     mock: false
   });
 };
+
+
+/**
+ * 上传调单数据
+ * @param {Object} params
+ * @return
+ */
+export const streamOperate = (params) => {
+  return request({
+    url: "/adjustment/upload",
+    method: "post",
+    data: params,
+    mock: false,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
