@@ -9,16 +9,22 @@
       <el-table-column prop="caseName" label="案件名称" width="200" />
       <el-table-column prop="caseDescribe" label="案件描述" />
       <el-table-column prop="caseDate" label="案件日期" width="200" />
-      <el-table-column fixed="right" label="操作" width="150">
+      <el-table-column fixed="right" label="操作" width="auto">
         <template #default="scope">
           <el-button
             link
             type="primary"
             size="small"
-            @click="handleClick(scope)"
-            >添加交易流水</el-button
+            @click="handleClick(scope.row)"
+            >添加调单数据</el-button
           >
-          <!-- <el-button link type="primary" size="small">Edit</el-button> -->
+          <el-button
+            link
+            type="primary"
+            @click="caseDetails(scope.row)"
+            size="small"
+            >案件详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -52,17 +58,19 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="addCaseformCanael(ruleFormRef)">取消提交</el-button>
-        <el-button type="primary" @click="addCaseformConfirm"> 提交 </el-button>
+        <el-button type="primary" @click="addCaseformConfirm(ruleFormRef)">
+          提交
+        </el-button>
       </span>
     </template>
   </el-dialog>
 
   <el-dialog v-model="dialogStreamFormVisible" title="新增调单数据">
     <el-form ref="ruleStreamRef" :model="addStreamform">
-      <el-form-item label="选择流水类型" :label-width="150" required>
+      <el-form-item label="请选择调单类型" :label-width="150" required>
         <el-select
           v-model="addStreamform.flowType"
-          placeholder="请选择流水类型"
+          placeholder="请选择调单类型"
         >
           <el-option
             v-for="item in optionsType"
@@ -80,7 +88,7 @@
           @change="handleFileChange"
         />
       </el-form-item>
-      <el-form-item label="上传文件" :label-width="120" required>
+      <el-form-item label="目标表" :label-width="120" required>
         <el-input
           v-model="addStreamform.targetTable"
           placeholder="请输入表名"
@@ -89,10 +97,10 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <!-- <el-button @click="addStreamformCanael(ruleFormRef)"
+        <el-button @click="addStreamformCanael(ruleStreamRef)"
           >取消提交</el-button
-        > -->
-        <el-button type="primary" @click="addStreamformConfirm">
+        >
+        <el-button type="primary" @click="addStreamformConfirm(ruleStreamRef)">
           提交
         </el-button>
       </span>
@@ -102,25 +110,24 @@
 
 <script setup>
 // vue3写法
-import { reactive, ref, getCurrentInstance, onMounted } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { getCasesList, casesOperate, streamOperate } from "../../api/case";
 import utils from "../../utils/utils";
-import moment from "moment";
-//   获取Composition API 上下文对象
-const { ctx } = getCurrentInstance();
-
+import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+const router = useRouter();
 // 添加案件节点
 const ruleFormRef = ref(null);
 
 // 案件列表
-const tableData = reactive([]);
+const tableData = ref([]);
 
 /**
  * 查询所有案件列表
  */
 const getDeptList = async () => {
   const list = await getCasesList();
-  tableData.value = tableData.push(...list);
+  tableData.value = [...list];
 };
 
 // 控制案件添加弹窗显示隐藏
@@ -144,15 +151,15 @@ const disabledDate = (time) => {
 // 取消提交
 const addCaseformCanael = (ruleFormRef) => {
   if (!addCaseform) return;
-  // ctx.$refs[form].resetFields();
   ruleFormRef.resetFields();
-  addCaseform.value = {};
+  addCaseform.caseDate = "";
+  addCaseform.caseName = "";
+  addCaseform.caseDescribe = "";
   dialogFormVisible.value = false;
 };
 
 // 提交表单案件
-const addCaseformConfirm = async () => {
-  if (!addCaseform) return;
+const addCaseformConfirm = async (ruleFormRef) => {
   if (addCaseform) {
     let data = { ...addCaseform, action: "create" };
 
@@ -160,11 +167,21 @@ const addCaseformConfirm = async () => {
     delete data.caseDate;
     console.log("caseDate", caseDate);
     let params = { caseDate, ...data };
-    const res = await casesOperate(params);
-    getDeptList();
+    await casesOperate(params);
+    ruleFormRef.resetFields();
+    addCaseform.caseDate = "";
+    addCaseform.caseName = "";
+    addCaseform.caseDescribe = "";
     dialogFormVisible.value = false;
+    getDeptList();
   } else {
+    return;
   }
+};
+
+// 跳转到案件详情
+const caseDetails = (caseItem) => {
+  router.push("/system/cases/caseDetails");
 };
 
 // 控制添加流水弹窗
@@ -188,12 +205,15 @@ const optionsType = ref([
 
 // 定义流水数据结构
 const addStreamform = reactive({
-  flowType: "1",
+  caseName: "",
+  flowType: "",
   targetTable: "",
   selectedFile: null,
 });
 
-const handleClick = () => {
+const handleClick = (item) => {
+  addStreamform.caseName = item.caseName;
+  console.log("item", item.caseName);
   dialogStreamFormVisible.value = true;
 };
 
@@ -202,14 +222,47 @@ const handleFileChange = (event) => {
   addStreamform.selectedFile = event.target.files[0];
 };
 
+//取消调单数据提交
+const addStreamformCanael = () => {
+  addStreamform.caseName = "";
+  addStreamform.flowType = "";
+  addStreamform.selectedFile = null;
+  addStreamform.targetTable = "";
+  const fileInput = document.querySelector(".upload");
+  if (fileInput) {
+    fileInput.value = "";
+  }
+  dialogStreamFormVisible.value = false;
+};
+
+// 提交调单数据
 const addStreamformConfirm = async () => {
-  console.log(1111);
-  const formData = new FormData();
-  formData.append("flowType", addStreamform.flowType);
-  formData.append("file", addStreamform.selectedFile);
-  formData.append("targetTable", addStreamform.targetTable);
-  console.log(2222);
-  const res = await streamOperate(formData);
+  if (addStreamform) {
+    const formData = new FormData();
+    formData.append("caseName", addStreamform.caseName);
+    formData.append("flowType", addStreamform.flowType);
+    formData.append("file", addStreamform.selectedFile);
+    formData.append("targetTable", addStreamform.targetTable);
+    const res = await streamOperate(formData);
+    console.log("res", res);
+    if (res.message === "添加成功") {
+      addStreamform.caseName = "";
+      addStreamform.flowType = "";
+      addStreamform.selectedFile = null;
+      addStreamform.targetTable = "";
+      const fileInput = document.querySelector(".upload");
+      if (fileInput.value) {
+        fileInput.value = "";
+      }
+      dialogStreamFormVisible.value = false;
+      ElMessage.success("添加成功");
+    } else {
+      ElMessage.warning("操作失败");
+    }
+  } else {
+    ElMessage.warning("请重新添加");
+    return;
+  }
 };
 
 onMounted(() => {
